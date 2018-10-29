@@ -1,29 +1,89 @@
 ---
-title: "`r proposal`"
-author: "`r author`"
+title: ""
+author: ""
 date: "`r Sys.Date()`"
-output: html_document
+output: pdf_document
 ---
 
-```{r setup, eval=TRUE, results='hide', echo=FALSE}
-knitr::opts_knit$set(warning = FALSE, message= FALSE)
-```
+# freda: Freeing data from PDF documents
+
+## People
+Brandon LeBeau, University of Iowa   
+Ariel M. Aloe, University of Iowa   
+Graduate or undergraduate University of Iowa student(s)
+
+## Summary
+Documents are commonly created using Portable Document Format (PDF) such as policy documents, journal articles, technical reports, unpublished manuscripts, software documentation, white papers, and many more types of documents. These documents can contain significant amounts of information and data that could be extracted and used for data analysis, content analysis, research synthesis, or meta-analysis. Although some efforts have been made to automatize the data extraction (e.g. `pdfsearch`, `tabulizer`), current practice to extract data from these types of documents is a time intensive process that could be prone to errors and is not reproducible. An additional challenge is the accessiblity of these tools for users who may be less familiar or comfortable with programming languages such as R.
+
+This project aims to 
+
+1. build a meta-package (similar to tidyverse or tidymodels) that combines R packages for extracting data (e.g. text, tables, figures) from PDF documents,
+2. extend current R package functionality to ensure cohesion of current implementations,
+3. use tidy data practices for efficient storage and analysis after successful data extraction,
+4. build a shiny application to facilitate the accessibility of the meta-package for those less familiar or comfortable with programming languages,
+5. promote reproducible and efficient data collection methods within sub-disciplines such as research synthesis, meta-analysis, policy analysis, and broadly the R communities.    
+
+The meta-package will use programming strategies implemented and promoted by the tidyverse style of packages and discussed in the [tidy tools manifesto](https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html).
+
+## The Problem
+Currently there is some implementation of text, tabular, and figure data extraction from PDF documents. However, the available functions work in isolation limiting cohesion and the implementation of these functions can be challenging for less proficient programmers. For example, social scientists, those conducting research syntheses, or qualitative analyses may have limited statistical programming skills to successfully use current tools for extracting data from PDF documents. These users are more likely to interact with statistical or data science tools that are GUI driven. 
+
+First, the creation of a meta-package will allow users to combine and use the state of the art R packages and also allow for easier installation, management, and combination of tools across these packages for a better user experience. In addition, a shiny app will be developed to facilitate user engagement from less proficient R users, such as users from the social sciences, those conducting qualitative analyses, or research syntheses. 
+
+Upon the completion of this project, users should be able to extract text, tabular, and figure data from PDF documents for subsequent analysis. This can free data from these documents instead of being locked within the PDF. In addition, the process will be developed to be tidy, reproducible, and will result in more transparency in the data extraction process.
+
+### Current Packages
+There are current support for extracting text, tables, or data from figures found within PDF documents. Packages for extracting text include [pdftools](https://cran.r-project.org/package=pdftools) which is based on the poppler C++ library, [Rpoppler](https://cran.r-project.org/package=Rpoppler) which uses the poppler Glib interface, and [rjpod](https://rdrr.io/rforge/rjpod/) which defines PDF utilites using the jPod Java library. Another package that wraps around pdftools is the [pdfsearch](https://cran.r-project.org/package=pdfsearch) which allows for more direct keyword searching in PDF documents and also has functionality to attempt to remove hyphens at the end of lines, split the PDF into sentences instead of lines, and collapse multi-column PDF documents into a single document. 
+
+A package named [tabulizer](https://cran.r-project.org/package=tabulizer) uses the Tabula Java library to extract tables from PDF documents. Finally, a bioconductor R package, [EBImage](https://www.bioconductor.org/packages/EBImage/), allows for the automatic extraction of figure data found in PDF documents. This package has been integrated into  [metagear](https://cran.r-project.org/package=metagear) for use in the field of meta-analysis and systematic review. Finally, a package for qualititative text analysis [RQDA](https://cran.r-project.org/package=RQDA) does not work directly with PDF documents, but can also import data from PDF highlights by using the `rjpod` package discussed above.
+
+## The Plan
+We will develop an R meta-package and companion shiny app that 
+
++ extracts text, tabular, or figure data from PDF documents,
++ supports a reproducible framework for the data extraction,
++ supports verification of PDF document rendered correctly prior to data extraction,
++ engages non-programmers to use the tools through the shiny app,
++ generates valid R code from the shiny app for future use in an R console,
++ practices tidy tools and data management best practices.
+
+The meta-package will be developed first to automatically install and load all the packages already developed to extract data from PDF documents. The package will be tested to determine additional functionality or helper functions that will need to be developed. Additional functions may include the ability to dynamically identify multi-column PDF documents and dynamically detect the best character(s) to split the PDF documents to turn them back into a single column PDF. This process is anticipated to take 6 to 8 weeks with additional testing taking place throughout the project timeline.
+
+Upon successful creation of the meta-package, the shiny application will be developed within the package for dispersal with the meta-package. This will allow users to run the shiny app locally after installing the R package and will require limited R commands/knowledge. If the application is popular, hosting the shiny app through the University of Iowa or on shinyapps.io will be explored. The development of the initial shiny app is expected to take 8 to 10 weeks. 
+
+Finally, unit testing will be developed to test both the functionality developed within the meta-package and also the shiny app. This will be done at the end of the coding phase of the project and is expected to take 2 to 4 weeks for development of an initial suite of tests. The tests will be integrated with a continuous integration service such as [Travis CI](https://travis-ci.org/). 
+
+#### Failure Modes
+Inability to integrate functionality across current package implementations to a common framework and to handle complex data extraction commands. Tables extraction with `tabulizer` may be particularly challenging due to the myriad of tables that are possible. Working directly with original package authors to integrate functionality and posing questions or issues on GitHub will help us to move past these problems.
+
+Language support other than English may limit usability of the tool. The R consortium's previously funded project, [R Localization](https://4dpiecharts.com/2016/03/23/rl10n-let-r-speak-your-language/) may help to alleviate these concerns, but English will be the focus of the package and additional language support will be explored in the future.
+
+Reporting practice for text, table, or figure structure could be problematic. A series of helper functions may need to be developed to overcome these challenges and direct contact with original package authors, either via email or through GitHub may help facilitate discussion of issues.  
+
+## The Team
+Brandon LeBeau is an Assistant Professor of Educational Measurement and Statistics at the University of Iowa and an R user since 2007. He specializes in applied statistics and statistical programming with R. He has created three R packages on CRAN, `pdfsearch`, `simglm`, and `highlightHTML` and has another `SPSStoR` that is available on GitHub. Two of the three packages on CRAN have been published within the *Journal of Open Source Software* and have undergone code review. Additionally, two of the pacakges mentioned above, `pdfsearch` and `simglm`, have companion shiny apps that come with the package for interactive use.
+
+Ariel M. Aloe is an Associate Professor of Educational Measurement and Statistics at the University of Iowa and an R user since 2005. He specializes in methodological development in meta-analysis with a focus on synthesizing regression coefficients. He also does extensive work in conducting research syntheses and meta-analyses to explore research questions of interest. His expertise with this project will focus around his experience with selecting and coding of the literature when conducting a research synthesis or meta-analysis. This process involves identifying, reading, and recording data from the primary literature for the topic of interest, most often from PDF documents. This project could greatly enhance the field of research synthesis and meta-analysis to be more transparent, reproducible, and less-prone to errors in data entry.
+
+A couple of graduate students will be recruited if the proposal is funded and will be paid with the requested funds. This individual will assist Brandon and Ariel with the primary coding resposibilities for the meta-package. These persons are anticipated to be graduate or undergraduate students at the University of Iowa and may come from the computer science, statistics, or applied mathematics departments. The desired skills when searching for these individuals will include prior experience with R programming (shiny experience a plus, but not necessary), experience working with text programmatically with regular expressions and git are preferred but not required, and any other programming experience would be added bonuses (such as Python, JavaScript, C++, etc.). 
 
 
-```{r autodoc, child='proposal/signatories.Rmd', eval=TRUE}
-```
+## Project Milestones
+Month 1: Establish new website, GitHub repo, develop and promote ad for additional support, design the meta-package/shiny application in broad terms.
+Months 2 - 6: Program R meta-package and shiny app, integrate unit testing, submit 2019 useR conference proposal.
+Months 7 - 8: Conduct small pilot on shiny app usability and stability, integrate shiny unit testing with the `shinytest` package.
+Months 9 - 12: Prepare tutorials, documentation, articles, and package vignettes.
 
-```{r autodoc, child='proposal/problemdefinition.Rmd', eval=TRUE}
-```
+## How Can The ISC Help
+The ISC can help to provide funds to pay for hourly graduate or undergraduate students to help create the meta-package, any helper functions needed to process the PDF document accurately and efficiently, and the creation of the shiny application. Total support requested will be \$12,000 USD, and breaks down into the following categories:
 
-```{r autodoc, child='proposal/proposal.Rmd', eval=TRUE}
-```
++ Funding for hourly graduate or undergraduate student(s): \$10,400
+    - This includes hourly costs (\$9600) and University fringe costs (approximately \$800)
++ Funding to cover a portion of the travel costs to 2019 useR conference: \$1600
 
-```{r autodoc, child='proposal/timeline.Rmd', eval=TRUE}
-```
+Additional support from the College of Education at the University of Iowa has been pledged to support travel, see the included letter of support from the Associate Dean for Research.
 
-```{r autodoc, child='proposal/requirements.Rmd', eval=TRUE}
-```
+## Dissemination
+Regular blog posts, approximately once a month, about the progress of the project at https://brandonlebeau.org and will be highlighted or promoted on twitter. A new website, created with `blogdown` and/or `pkgdown`, will also be created specifically for this project to provide a project landing page. Regular updates and documentation will be hosted here, url to be determined later. Both of the websites discussed above will be archived with https://rweekly.org/ to increase visibility within the R community. The meta-package live on GitHub at https://github.com/lebebr01 where issues, releases, and pull requests will be used to track progress and encourage community engagement. The software will be released under an open-source license such as GPL v2. R consortium blog posts will be written at least quarterly, or more frequently as requested. 
 
-```{r autodoc, child='proposal/success.Rmd', eval=TRUE}
-```
+Conference proposals will be submitted to the 2019 useR conference and a research synthesis and meta analysis conference to show a demo of the meta-package to a variety of users. Publication in the *R Journal* or *Journal of Open Source Software* and additional subject specific tutorials within research synthesis and meta analysis or policy social science journals will be pursued. Any journal articles written will also be posted as pre-prints on the University of Iowa preprent repository (https://ir.uiowa.edu/) or other subject specific pre-print repositories, such as [PsyArXiv](https://psyarxiv.com/).
